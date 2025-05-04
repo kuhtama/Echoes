@@ -1,3 +1,3 @@
 <?php
-$koneksi = mysqli_gitconnect("localhost", "root", "", "echoes");
+$koneksi = mysqli_connect("localhost", "root", "", "echoes");
 ?>
