@@ -13,11 +13,11 @@ if (!$data) {
 if (isset($_POST['simpan'])) {
     $nm_kategori = $_POST['nm_kategori'];
 
-    $query = mysqli_query($koneksi, "UPDATE tb_ktg = '$nm_kategori' WHERE id_ktg = '$id'");
+    $query = mysqli_query($koneksi, "UPDATE tb_ktg SET nm_ktg = '$nm_kategori' WHERE id_ktg = '$id'");
     if ($query) {
-        echo"<script>alert('Data berhasil diudah!'); window.location.href = 'kategori.php';</script>";
+        echo "<script>alert('Data berhasil diudah!'); window.location.href = 'kategori.php';</script>";
     } else {
-        echo"<script>alert('Data gagal diubah!'); window.location.href = 'kategori.php';</script>";
+        echo "<script>alert('Data gagal diubah!'); window.location.href = 'kategori.php';</script>";
     }
 }
 ?>
