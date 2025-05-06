@@ -210,7 +210,7 @@ if (isset($_POST['simpan'])) {
             <!-- You can delete the links only if you purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            Designed by <a href="https://instagram.com/ku_kuh11" target="_blank">Kukuh Putra</a>
+            Designed by <a href="https://www.instagram.com/ku_kuh11?igsh=OXo1MGNkdWI2YnB4" target="_blank">Kukuh Putra</a>
         </div>
     </footer><!-- End Footer -->
 
