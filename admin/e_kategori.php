@@ -172,7 +172,7 @@ if (isset($_POST['simpan'])) {
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
                     <li class="breadcrumb-item">Kategori Produk</li>
-                    <li class="breadcrumb-item active">Tambah</li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -188,6 +188,7 @@ if (isset($_POST['simpan'])) {
                                 <div class="col-12">
                                     <label for="nm_kategori" class="form-label">Nama Kategori Produk</label>
                                     <input type="text" class="form-control" id="nm_kategori" name="nm_kategori" placeholder="Masukkan Nama Kategori">
+                                    value="<?php echo htmlspecialchars($data['nm_ktg']); ?>">
                                     <div class="text-center mt-2">
                                         <button type="reset" class="btn btn-secondary">Reset</button>
                                         <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
