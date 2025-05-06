@@ -1,3 +1,25 @@
+<?php
+include "koneksi.php";
+if (isset($_POST['simpan'])) {
+    $auto = mysqli_query($koneksi, "select max(id_ktg) as max_code From tb_ktg");
+    $hasil = mysqli_fetch_array($auto);
+    $code = $hasil['max_code'];
+    $urutan = (int)substr($code, 1, 3);
+    $urutan++;
+    $huruf = "K";
+    $id_kategori = $huruf . sprintf("%03s", $urutan);
+    $nm_kategori = $_POST['nm_kategori'];
+
+    $query = mysqli_query($koneksi, "INSERT INTO tb_ktg(id_ktg, nm_ktg) VALUES ('$id_kategori', '$nm_kategori')");
+    if ($query) {
+        echo "<script>alert('Data berhasil ditambahkan !')</script>";
+        header("refresh:0, kategori.php");
+    } else {
+        echo "<script>alert('Data berhasil ditambahakan!')</script>";
+        header("refresh:0, kategori.php");
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,38 +61,24 @@
 </head>
 
 <body>
+
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            <a href="index.html" class="logo d-flex align-items-center">
+            <a href="index.php" class="logo d-flex align-items-center">
                 <img src="assets/img/logo.png" alt="">
                 <span class="d-none d-lg-block">Echoes</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
 
-        <div class="search-bar">
-            <form class="search-form d-flex align-items-center" method="POST" action="#">
-                <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-            </form>
-        </div><!-- End Search Bar -->
-
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
-
-                <li class="nav-item d-block d-lg-none">
-                    <a class="nav-link nav-icon search-bar-toggle " href="#">
-                        <i class="bi bi-search"></i>
-                    </a>
-                </li><!-- End Search Icon-->
-
                 <li class="nav-item dropdown pe-3">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         <img src="assets/img/shimarin.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2"></span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -96,6 +104,8 @@
         </nav><!-- End Icons Navigation -->
 
     </header><!-- End Header -->
+
+
     <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
 
@@ -160,87 +170,30 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-                    <li class="breadcrumb-item active">Kategori Produk</li>
+                    <li class="breadcrumb-item">Kategori Produk</li>
+                    <li class="breadcrumb-item active">Tambah</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <a href="t_kategori.php" class="btn btn-primary mt-3">
-                            <i class="bi bi-plus-ig"></i> Tambah Data
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
         <section class="section">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
+
                     <div class="card">
                         <div class="card-body">
 
-                            <!-- Table with stripped rows -->
-                            <table class="table table-striped mt-2">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Nama Kategori</th>
-                                        <th scope="col">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    include "koneksi.php";
-                                    $no = 1;
-
-                                    // cek apakah ada pencarian
-                                    $query = isset($_POST['quary']) ? mysqli_real_escape_string($koneksi, $_POST['query']) : "";
-
-                                    // Query dasar
-                                    $sql_query = "SELECT id_ktg, nm_ktg FROM tb_ktg";
-
-                                    // Jika ada pencarian, tambahkan kondisi WHERE
-                                    if (!empty($query)) {
-                                        $sql_query .= " WHERE nm_ktg LIKE '%$query%'";
-                                    }
-
-                                    $sql = mysqli_query($koneksi, $sql_query);
-
-                                    if (mysqli_num_rows($sql) > 0) {
-                                        while ($hasil = mysqli_fetch_array($sql)) {
-                                    ?>
-                                            <tr>
-                                                <td><?php echo $no++; ?></td>
-                                                <td><?php echo $hasil['nm_ktg']; ?></td>
-                                                <td>
-                                                    <a href="e_katerogi.php?id=<?php echo $hasil['id_ktg']; ?>" class="btn btn-warning">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </a>
-                                                    <a href="h_kategori.php?id=<?php echo $hasil['id_ktg']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                        }
-                                    } else {
-                                        ?>
-                                        <tr>
-                                            <td colspan="3" class="text-center">Belum Ada Data</td>
-                                        </tr>
-                                    <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                            <!-- End Table with stripped rows -->
-
+                            <!-- Vertical Form -->
+                            <form class="row g-3 mt-2" method="post">
+                                <div class="col-12">
+                                    <label for="nm_kategori" class="form-label">Nama Kategori Produk</label>
+                                    <input type="text" class="form-control" id="nm_kategori" name="nm_kategori" placeholder="Masukkan Nama Kategori">
+                                    <div class="text-center mt-2">
+                                        <button type="reset" class="btn btn-secondary">Reset</button>
+                                        <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
+                                    </div>
+                            </form><!-- Vertical Form -->
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -257,7 +210,7 @@
             <!-- You can delete the links only if you purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            Designed by <a href="https://bootstrapmade.com/">Kukuh Putra</a>
+            Designed by <a href="https://instagram.com/" target="_blank">Kukuh Putra</a>
         </div>
     </footer><!-- End Footer -->
 
