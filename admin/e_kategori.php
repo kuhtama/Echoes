@@ -1,22 +1,23 @@
 <?php
 include "koneksi.php";
+$id - $_GET["id"];
+$sql - mysqli_query($koneksi, "SELECT * FROM tb_ktg WHERE id_ktg = '$id'");
+$data - mysqli_fetch_array($sql);
+
+// cek data apakah ditemukan
+if (!$data) {
+    echo "<script>alert('data tidak ditemukan'); window.location.href = 'kategori.php';</script>";
+    exit;
+}
+
 if (isset($_POST['simpan'])) {
-    $auto = mysqli_query($koneksi, "select max(id_ktg) as max_code From tb_ktg");
-    $hasil = mysqli_fetch_array($auto);
-    $code = $hasil['max_code'];
-    $urutan = (int)substr($code, 1, 3);
-    $urutan++;
-    $huruf = "K";
-    $id_kategori = $huruf . sprintf("%03s", $urutan);
     $nm_kategori = $_POST['nm_kategori'];
 
-    $query = mysqli_query($koneksi, "INSERT INTO tb_ktg(id_ktg, nm_ktg) VALUES ('$id_kategori', '$nm_kategori')");
+    $query = mysqli_query($koneksi, "UPDATE tb_ktg = '$nm_kategori' WHERE id_ktg = '$id'");
     if ($query) {
-        echo "<script>alert('Data berhasil ditambahkan !')</script>";
-        header("refresh:0, kategori.php");
+        echo"<script>alert('Data berhasil diudah!'); window.location.href = 'kategori.php';</script>";
     } else {
-        echo "<script>alert('Data berhasil ditambahakan!')</script>";
-        header("refresh:0, kategori.php");
+        echo"<script>alert('Data gagal diubah!'); window.location.href = 'kategori.php';</script>";
     }
 }
 ?>
