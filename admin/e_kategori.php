@@ -1,26 +1,29 @@
 <?php
 include "koneksi.php";
+
 $id = $_GET['id'];
 $sql = mysqli_query($koneksi, "SELECT * FROM tb_ktg WHERE id_ktg = '$id'");
 $data = mysqli_fetch_array($sql);
 
-// cek data apakah ditemukan
+// Cek apakah data ditemukan
 if (!$data) {
-    echo "<script>alert('data tidak ditemukan'); window.location.href = 'kategori.php';</script>";
+    echo "<script>alert('Data tidak ditemukan!'); window.location.href = 'kategori.php';</script>";
     exit;
 }
 
 if (isset($_POST['simpan'])) {
-    $nm_kategori = $_POST['nm_kategori'];
+    $nm_ktg = $_POST['nm_ktg'];
 
-    $query = mysqli_query($koneksi, "UPDATE tb_ktg SET nm_ktg = '$nm_kategori' WHERE id_ktg = '$id'");
+    $query = mysqli_query($koneksi, "UPDATE tb_ktg SET nm_ktg = '$nm_ktg' WHERE id_ktg = '$id'");
+
     if ($query) {
-        echo "<script>alert('Data berhasil diudah!'); window.location.href = 'kategori.php';</script>";
+        echo "<script>alert('Data berhasil diubah!'); window.location.href = 'kategori.php';</script>";
     } else {
         echo "<script>alert('Data gagal diubah!'); window.location.href = 'kategori.php';</script>";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -113,14 +116,14 @@ if (isset($_POST['simpan'])) {
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link " href="index.php">
+                <a class="nav-link collapsed " href="index.php">
                     <i class="bi-house-door"></i>
                     <span>Beranda</span>
                 </a>
             </li><!-- End Dashboard Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="kategori.php">
+                <a class="nav-link" href="kategori.php">
                     <i class="bi-grid"></i>
                     <span>Kategori Produk</span>
                 </a>

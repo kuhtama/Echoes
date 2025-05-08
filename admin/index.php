@@ -91,7 +91,7 @@
 
       <li class="nav-item">
         <a class="nav-link " href="index.php">
-          <i class="bi-house-door"></i>
+          <i class="bi-house-door-fill"></i>
           <span>Beranda</span>
         </a>
       </li><!-- End Dashboard Nav -->
