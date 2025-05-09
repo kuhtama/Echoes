@@ -189,9 +189,8 @@ if (isset($_POST['simpan'])) {
                             <!-- Vertical Form -->
                             <form class="row g-3 mt-2" method="post">
                                 <div class="col-12">
-                                    <label for="nm_kategori" class="form-label">Nama Kategori Produk</label>
-                                    <input type="text" class="form-control" id="nm_kategori" name="nm_kategori" placeholder="Masukkan Nama Kategori">
-                                    value="<?php echo htmlspecialchars($data['nm_ktg']); ?>">
+                                    <label for="nm_ktg" class="form-label">Nama Kategori Produk</label>
+                                    <input type="text" class="form-control" id="nm_ktg" name="nm_ktg" placeholder="Masukkan Nama Kategori" value="<?php echo htmlspecialchars($data['nm_ktg']); ?>">
                                     <div class="text-center mt-2">
                                         <button type="reset" class="btn btn-secondary">Reset</button>
                                         <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
