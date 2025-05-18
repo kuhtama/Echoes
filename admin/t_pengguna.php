@@ -32,11 +32,11 @@ if (isset($_POST['simpan'])) {
     // Ambil input dari form
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
-    $status = $_POST['status'];
+    $status = $_POST['sts'];
 
     // Query untuk insert data ke tb_user
-    $query = mysqli_query($koneksi, "INSERT INTO tb_user (id_user, username, password, status) 
-                                     VALUES ('$id_user', '$username', '$password', '$status')");
+    $query = mysqli_query($koneksi, "INSERT INTO tb_user (id_user, username, password, sts) 
+                                     VALUES ('$id_user', '$username', '$password', '$sts')");
 
     // Notifikasi
     if ($query) {
@@ -238,10 +238,10 @@ if (isset($_POST['simpan'])) {
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="copyright">
-            &copy; Copyright <strong><span>Furnimart</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span>Echoes</span></strong>. All Rights Reserved
         </div>
         <div class="credits">
-            Designed by <a href="https://instagram.com/dea.salsa.503/" target="_blank">Echoes</a>
+            Designed by <a href="https://instagram.com/ku_kuh11?igsh=OXo1MGNkdWI2YnB4" target="_blank">Kukuh Putra</a>
         </div>
     </footer><!-- End Footer -->
 

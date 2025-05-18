@@ -9,7 +9,7 @@ if (!isset($_SESSION["login"])) {
 }
 
 // Cek apakah status tersedia dan pastikan user adalah admin
-if (!isset($_SESSION["status"]) || $_SESSION["status"] !== "admin") {
+if (!isset($_SESSION["sts"]) || $_SESSION["sts"] !== "admin") {
     echo "<script>
     alert('Akses ditolak! Halaman ini hanya untuk Admin.');
     window.location.href='login.php';
@@ -230,7 +230,7 @@ if (!isset($_SESSION["status"]) || $_SESSION["status"] !== "admin") {
                                             <tr>
                                                 <td><?php echo $no++; ?></td>
                                                 <td><?php echo $hasil['username']; ?></td>
-                                                <td><?php echo $hasil['status']; ?></td>
+                                                <td><?php echo $hasil['sts']; ?></td>
                                                 <td>
                                                     <a href="h_pengguna.php?id=<?php echo $hasil['id_user']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')">
                                                         <i class="bi bi-trash"></i>
