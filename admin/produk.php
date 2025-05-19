@@ -1,3 +1,23 @@
+<?php
+session_start();
+include "koneksi.php";
+
+// Cek apakah sudah login
+if (!isset($_SESSION["login"])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Cek apakah status tersedia dan pastikan user adalah admin
+if (!isset($_SESSION["status"]) || $_SESSION["status"] !== "admin") {
+    echo "<script>
+    alert('Akses ditolak! Halaman ini hanya untuk Admin.');
+    window.location.href='login.php';
+  </script>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -224,6 +244,7 @@
                                                 <td>Rp <?php echo number_format($hasil['harga'], 0, ', ', '.'); ?></td>
                                                 <td><?php echo $hasil['stok']; ?></td>
                                                 <td><?php echo $no++; ?></td>
+                                                <td><?php echo $hasil['nm_ktg']; ?></td>
                                                 <td>
                                                     <?php if (!empty($hasil['gambar'])) { ?>
                                                         <img src="produk_img/<?php echo $hasil['gambar']; ?>" width="100">
@@ -231,7 +252,6 @@
                                                         Tidak ada gambar
                                                     <?php } ?>
                                                 </td>
-                                                <td><?php echo $hasil['size']; ?></td>
                                                 <td>
                                                     <a href="e_produk.php?id=<?php echo $hasil['id_produk']; ?>" class="btn btn-warning">
                                                         <i class="bi bi-pencil-square"></i>

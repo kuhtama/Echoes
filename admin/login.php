@@ -18,7 +18,7 @@ if (isset($_POST["login"])) {
             if ($row["sts"] == "admin") {
                 $_SESSION["login"] = true;
                 $_SESSION["username"] = $row["username"];
-                $_SESSION["status"] = $row["sts"];
+                $_SESSION["sts"] = $row["sts"];
                 header("Location: index.php");
                 exit;
             } else {

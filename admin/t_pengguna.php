@@ -9,7 +9,7 @@ if (!isset($_SESSION["login"])) {
 }
 
 // Cek apakah status tersedia dan pastikan user adalah admin
-if (!isset($_SESSION["status"]) || $_SESSION["status"] !== "admin") {
+if (!isset($_SESSION["sts"]) || $_SESSION["sts"] !== "admin") {
     echo "<script>
     alert('Akses ditolak! Halaman ini hanya untuk Admin.');
     window.location.href='login.php';
@@ -24,7 +24,7 @@ if (isset($_POST['simpan'])) {
     $code = $hasil['max_code'];
 
     // Menghasilkan ID baru dengan format U001, U002, dst.
-    $urutan = (int)substr($code, 1, 3);
+    $urutan = (int)substr($code, 1, 3); 
     $urutan++;
     $huruf = "U";
     $id_user = $huruf . sprintf("%03s", $urutan);
@@ -32,7 +32,7 @@ if (isset($_POST['simpan'])) {
     // Ambil input dari form
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
-    $status = $_POST['sts'];
+    $sts = $_POST['sts'];
 
     // Query untuk insert data ke tb_user
     $query = mysqli_query($koneksi, "INSERT INTO tb_user (id_user, username, password, sts) 
@@ -212,8 +212,8 @@ if (isset($_POST['simpan'])) {
 
                                 <!-- Status -->
                                 <div class="col-12">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select class="form-select" id="status" name="status" required>
+                                    <label for="sts" class="form-label">Status</label>
+                                    <select class="form-select" id="sts" name="sts" required>
                                         <option value="">Pilih Status</option>
                                         <option value="admin">Admin</option>
                                         <option value="customer">Customer</option>

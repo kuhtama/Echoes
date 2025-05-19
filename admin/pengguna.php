@@ -215,7 +215,7 @@ if (!isset($_SESSION["sts"]) || $_SESSION["sts"] !== "admin") {
                                     $query = isset($_POST['query']) ? mysqli_real_escape_string($koneksi, $_POST['query']) : '';
 
                                     // Query dasar
-                                    $sql_query = "SELECT id_user, username, status FROM tb_user";
+                                    $sql_query = "SELECT id_user, username, sts FROM tb_user";
 
                                     // Tambahkan pencarian jika input tidak kosong
                                     if (!empty($query)) {
@@ -224,27 +224,29 @@ if (!isset($_SESSION["sts"]) || $_SESSION["sts"] !== "admin") {
 
                                     $sql = mysqli_query($koneksi, $sql_query);
 
-                                    if (mysqli_num_rows($sql) > 0) {
+                                  if (mysqli_num_rows($sql) > 0) {
                                         while ($hasil = mysqli_fetch_array($sql)) {
-                                    ?>
+                                            ?>
                                             <tr>
                                                 <td><?php echo $no++; ?></td>
                                                 <td><?php echo $hasil['username']; ?></td>
                                                 <td><?php echo $hasil['sts']; ?></td>
                                                 <td>
-                                                    <a href="h_pengguna.php?id=<?php echo $hasil['id_user']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')">
+                                                    <a href="h_pengguna.php?id=<?php echo $hasil['id_user']; ?>"
+                                                        class="btn btn-danger"
+                                                        onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data?')">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                        <?php
+                                            <?php
                                         }
                                     } else {
                                         ?>
                                         <tr>
                                             <td colspan="4" class="text-center">Data tidak ditemukan</td>
                                         </tr>
-                                    <?php
+                                        <?php
                                     }
                                     ?>
 
