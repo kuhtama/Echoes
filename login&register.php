@@ -1,14 +1,22 @@
+<?php
+session_start();
+
+require 'admin/koneksi.php';
+require 'function.php';
+$sql = mysqli_query($koneksi, "select * from tb_user");
+$data = mysqli_fetch_array($sql);
+?>
+  
 <!DOCTYPE html>
 <html lang="en">
 
 
-<!-- molla/category-list.html  22 Nov 2019 10:02:52 GMT -->
-
+<!-- molla/login.html  22 Nov 2019 10:04:03 GMT -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Belanja - Echoes</title>
+    <title>Echoes - Bootstrap eCommerce Template</title>
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Molla - Bootstrap eCommerce Template">
     <meta name="author" content="p-themes">
@@ -28,14 +36,41 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/plugins/owl-carousel/owl.carousel.css">
-    <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
-    <link rel="stylesheet" href="assets/css/plugins/nouislider/nouislider.css">
 </head>
 
 <body>
+  <?php
+    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
+        if (registrasi($_POST)) {
+            echo "<script>alert('User baru brhasil ditambahkan');";
+            echo "window.location.href = 'login&register.php';</script>";
+            exit;
+    } else {
+            echo "<script>alert('Registrasi gagal');</script>";
+    }
+    }
+    ?>
     <div class="page-wrapper">
         <header class="header">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-left">
+                        <div class="header-dropdown">
+
+                    </div><!-- End .header-left -->
+
+                    <div class="header-right">
+                        <ul class="top-menu">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                </ul>
+                            </li>
+                        </ul><!-- End .top-menu -->
+                    </div><!-- End .header-right -->
+                </div><!-- End .container -->
+            </div><!-- End .header-top -->
+
             <div class="header-middle sticky-header">
                 <div class="container">
                     <div class="header-left">
@@ -43,29 +78,64 @@
                             <span class="sr-only">Toggle mobile menu</span>
                             <i class="icon-bars"></i>
                         </button>
-                        <a href="index.php" class="logo">
-                            <span style="font-size: 50px; font-weight: bold; font-family: Arial, sans-serif;">Outfitz</span>
+
+                        <a href="index.html" class="logo">
+                            <span style="font-size: 50px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">Ilhamwear</span>
                         </a>
+
+                    
                     </div><!-- End .header-left -->
+                        <nav class="main-nav" style="flex:1; text-align:center;">
+                            <ul class="menu sf-arrows" style="display: inline-flex; gap:30px; list-style:none; margin:0; padding:0;">
+                                <li class="megamenu-container active">
+                                    <a href="index.php" class="sf-with-ul">Beranda</a>
 
-                    <nav class="main-nav" style="flex: 1; text-align: center;">
-                        <ul class="menu sf-arrows" style="display: inline-flex; gap: 30px; list-style: none; margin: 0; padding: 0;">
-                            <li><a href="index.php" class="sf-with-ul">Beranda</a></li>
-                            <li class="megamenu-container active"><a href="belanja.php" class="sf-with-ul">Belanja</a></li>
-                            <li><a href="contact.php" class="sf-with-ul">Hubungi Kami</a></li>
-                        </ul>
-                    </nav>
+                                   
+                                </li>
+                                <li>
+                                    <a href="belanja.php" class="sf-with-ul">Belanja</a>
 
-                    <div class="header-right d-flex align-items-center">
+
+                                </li>
+                                <li>
+                                    <a href="contact.php" class="sf-with-ul">Hubungi Kami</a>
+                                </li>
+                            </ul><!-- End .menu -->
+                        </nav><!-- End .main-nav -->
+
+                    <div class="header-right">
                         <div class="header-search">
                             <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                            <form action="belanja.php" method="get">
+                            <form action="#" method="get">
                                 <div class="header-search-wrapper">
                                     <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search produk..." required>
-                                </div>
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                                </div><!-- End .header-search-wrapper -->
                             </form>
-                        </div>
+                        </div><!-- End .header-search -->
+                        <div class="dropdown compare-dropdown">
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Compare Products" aria-label="Compare Products">
+                                <i class="icon-random"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <ul class="compare-products">
+                                    <li class="compare-product">
+                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                        <h4 class="compare-product-title"><a href="product.html">Blue Night Dress</a></h4>
+                                    </li>
+                                    <li class="compare-product">
+                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                        <h4 class="compare-product-title"><a href="product.html">White Long Skirt</a></h4>
+                                    </li>
+                                </ul>
+
+                                <div class="compare-actions">
+                                    <a href="#" class="action-link">Clear All</a>
+                                    <a href="#" class="btn btn-outline-primary-2"><span>Compare</span><i class="icon-long-arrow-right"></i></a>
+                                </div>
+                            </div><!-- End .dropdown-menu -->
+                        </div><!-- End .compare-dropdown -->
 
                         <div class="dropdown cart-dropdown">
                             <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
@@ -123,277 +193,185 @@
                                 </div><!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.php" class="btn btn-primary">View Cart</a>
+                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
                                     <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
-                        <div class="dropdown user-dropdown">
-                            <!-- Gunakan satu elemen untuk ikon dan toggle dropdown -->
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="User">
-                                <i class="icon-user"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="logout.php">Logout</a>
-                            </div>
-                        </div>
-
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
 
         <main class="main">
-            <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-                <div class="container">
-                    <h1 class="page-title"><span>Belanja</span></h1>
-                </div><!-- End .container -->
-            </div><!-- End .page-header -->
-            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Belanja</li>
-                         <li class="breadcrumb-item active" aria-current="page">Detail Produk</li>
+                        <li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="#">Belanja</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Login</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
-            <div class="page-content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <div class="toolbox">
-                                <div class="toolbox-right">
-                                    <div class="toolbox-sort">
-                                        <label for="sortby"></label>
-                                        <div>
-                                            <option value="rating"></option>
-                                            <option value="date"></option>
-                                            </select>
-                                        </div>
-                                    </div><!-- End .toolbox-sort -->
-                                    <div class="toolbox-layout">
-                                    </div><!-- End .toolbox-layout -->
-                                </div><!-- End .toolbox-right -->
-                            </div><!-- End .toolbox -->
+            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
+            	<div class="container">
+            		<div class="form-box">
+            			<div class="form-tab">
+	            			<ul class="nav nav-pills nav-fill" role="tablist">
+							    <li class="nav-item">
+							        <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">Sign In</a>
+							    </li>
+							    <li class="nav-item">
+							        <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab" aria-controls="register-2" aria-selected="true">Register</a>
+							    </li>
+							</ul>
+							<div class="tab-content">
+							    <div class="tab-pane fade" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+							    	<form action="#">
+							    		<div class="form-group">
+							    			<label for="singin-email-2">Username </label>
+							    			<input type="text" class="form-control" id="singin-email-2" name="singin-email" required>
+							    		</div><!-- End .form-group -->
 
-                            <div class="products mb-3">
-                                <?php
-                                include 'admin/koneksi.php'; // Pastikan file koneksi ke database disertakan
-                                $where = '';
-                                if (isset($_GET['q']) && !empty($_GET['q'])) {
-                                    $search = mysqli_real_escape_string($koneksi, $_GET['q']);
-                                    $where = "WHERE p.nm_produk LIKE '%$search%'";
-                                }
+							    		<div class="form-group">
+							    			<label for="singin-password-2">Password </label>
+							    			<input type="password" class="form-control" id="singin-password-2" name="singin-password" required>
+							    		</div><!-- End .form-group -->
 
-                                $query = "SELECT p.id_produk, p.nm_produk, p.harga, p.stok, p.ket, p.gambar, p.size, k.nm_ktg
-          FROM tb_produk p
-          JOIN tb_ktg k ON p.id_ktg = k.id_ktg
-          $where";
+							    		<div class="form-footer">
+							    			<button type="submit" class="btn btn-outline-primary-2">
+			                					<span>LOG IN</span>
+			            						<i class="icon-long-arrow-right"></i>
+			                				</button>
 
-                                $result = mysqli_query($koneksi, $query);
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                ?>
-                                    <div class="product product-list">
-                                        <div class="row">
-                                            <div class="col-6 col-lg-3">
-                                                <figure class="product-media">
-                                                    <a href="product-detail.php?id=<?php echo $row['id_produk']; ?>">
-                                                        <img src="admin/produk_img/<?php echo $row['gambar']; ?>" alt="Product image" class="product-image uniform-img">
-                                                    </a>
-                                                </figure>
-                                            </div>
+			                				<div class="custom-control custom-checkbox">
+												<input type="checkbox" class="custom-control-input" id="signin-remember-2">
+											</div><!-- End .custom-checkbox -->
 
-                                            <div class="col-6 col-lg-3 order-lg-last">
-                                                <div class="product-list-action">
-                                                    <div class="product-price">
-                                                        Rp. <?php echo number_format($row['harga'], 0, ',', '.'); ?>
-                                                    </div>
+							    		</div><!-- End .form-footer -->
+							    	</form>
+							    	<div class="form-choice">
+								    	<div class="row">
+								    		<div class="col-sm-6">
+								    		</div><!-- End .col-6 -->
+								    		<div class="col-sm-6">	
+								    		</div><!-- End .col-6 -->
+								    	</div><!-- End .row -->
+							    	</div><!-- End .form-choice -->
+							    </div><!-- .End .tab-pane -->
+							    <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+							    	<form action="#" method="post">
+							    		<div class="form-group">
+							    			<label for="username">Username</label>
+							    			<input type="text" class="form-control" id="username" name="username" required>
+							    		</div><!-- End .form-group -->
 
-                                                    <div class="product-action">
-                                                        <a href="#" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                                                        <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
-                                                    </div>
-                                                    <a href="detail_produk.php?id_produk=<?php echo $row['id_produk']; ?>" class="btn-product btn-cart"><span>Keranjang</span></a>
-                                                </div>
-                                            </div>
+							    		<div class="form-group">
+							    			<label for="password">Password</label>
+							    			<input type="password" class="form-control" id="password" name="password" required>
+							    		</div><!-- End .form-group -->
 
-                                            <div class="col-lg-6">
-                                                <div class="product-body product-action-inner">
-                                                    <div class="product-cat">
-                                                        <a href="#"><?php echo $row['nm_ktg']; ?></a>
-                                                    </div>
-                                                    <h3 class="product-title"><a href="product-detail.php?id=<?php echo $row['id_produk']; ?>"><?php echo $row['nm_produk']; ?></a></h3>
+                                        <div class="form-group">
+							    			<label for="password2">Konfirmasi Pasword</label>
+							    			<input type="password" class="form-control" id="password2" name="password2" required>
+							    		</div><!-- End .form-group -->
 
-                                                    <div class="product-content">
-                                                        <p><?php echo $row['ket']; ?></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div><!-- End .products -->
-
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                        </a>
-                                    </li>
-                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item-total">of 6</li>
-                                    <li class="page-item">
-                                        <a class="page-link page-link-next" href="#" aria-label="Next">
-                                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div><!-- End .col-lg-9 -->
-                        <aside class="col-lg-3 order-lg-first">
-                            <div class="sidebar sidebar-shop">
-                                <?php
-                                // Koneksi ke database
-                                include 'admin/koneksi.php'; // Pastikan file koneksi benar
-
-                                // Ambil semua kategori
-                                $query = "SELECT k.id_ktg, k.nm_ktg, COUNT(p.id_produk) as jumlah 
-          FROM tb_ktg k 
-          LEFT JOIN tb_produk p ON k.id_ktg = p.id_ktg 
-          GROUP BY k.id_ktg, k.nm_ktg";
-                                $result = mysqli_query($koneksi, $query);
-                                ?>
-
-
-                                <div class="widget widget-collapsible">
-                                    <h3 class="widget-title">
-                                        <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
-                                            Category
-                                        </a>
-                                    </h3><!-- End .widget-title -->
-
-                                    <div class="collapse show" id="widget-1">
-                                        <div class="widget-body">
-                                            <div class="filter-items filter-items-count">
-                                                <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-                                                    <div class="filter-item">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cat-<?php echo $row['id_ktg']; ?>">
-                                                            <label class="custom-control-label" for="cat-<?php echo $row['id_ktg']; ?>">
-                                                                <?php echo htmlspecialchars($row['nm_ktg']); ?>
-                                                            </label>
-                                                        </div><!-- End .custom-checkbox -->
-                                                        <span class="item-count"><?php echo $row['jumlah']; ?></span>
-                                                    </div><!-- End .filter-item -->
-                                                <?php endwhile; ?>
-                                            </div><!-- End .filter-items -->
-                                        </div><!-- End .widget-body -->
-                                    </div><!-- End .collapse -->
-                                </div><!-- End .widget -->
-
-                                <?php
-                                include 'admin/koneksi.php'; // Koneksi ke database
-
-                                $query = "SELECT size FROM tb_produk WHERE size IS NOT NULL AND size != ''";
-                                $result = mysqli_query($koneksi, $query);
-
-                                $sizes = [];
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    // Pecah ukuran berdasarkan koma
-                                    $sizeArray = explode(',', $row['size']);
-
-                                    foreach ($sizeArray as $size) {
-                                        $cleanSize = trim($size); // Hilangkan spasi
-                                        if ($cleanSize !== '') {
-                                            $sizes[] = $cleanSize;
-                                        }
-                                    }
-                                }
-
-                                // Ambil ukuran unik dan urutkan
-                                $uniqueSizes = array_unique($sizes);
-                                sort($uniqueSizes); // Urutkan A-Z
-                                ?>
-
-
-
-                                <div class="widget widget-collapsible">
-                                    <h3 class="widget-title">
-                                        <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
-                                            Size
-                                        </a>
-                                    </h3><!-- End .widget-title -->
-
-                                    <div class="collapse show" id="widget-2">
-                                        <div class="widget-body">
-                                            <div class="filter-items">
-                                                <?php
-                                                $i = 1;
-                                                foreach ($uniqueSizes as $size) :
-                                                ?>
-                                                    <div class="filter-item">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="size-<?php echo $i; ?>" value="<?php echo $size; ?>">
-                                                            <label class="custom-control-label" for="size-<?php echo $i; ?>"><?php echo $size; ?></label>
-                                                        </div><!-- End .custom-checkbox -->
-                                                    </div><!-- End .filter-item -->
-                                                <?php
-                                                    $i++;
-                                                endforeach;
-                                                ?>
-                                            </div><!-- End .filter-items -->
-                                        </div><!-- End .widget-body -->
-                                    </div><!-- End .collapse -->
-                                </div><!-- End .widget -->
-                            </div><!-- End .sidebar sidebar-shop -->
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .page-content -->
+							    		<div class="form-footer">
+							    			<button type="submit" class="btn btn-outline-primary-2" name="register">
+			                					<span>SIGN UP</span>
+			            						<i class="icon-long-arrow-right"></i>
+			                				</button>
+							    		</div><!-- End .form-footer -->
+							    	</form>
+								    		</div><!-- End .col-6 -->
+								    		<div class="col-sm-6">
+								    		
+								    			</a>
+								    		</div><!-- End .col-6 -->
+								    	</div><!-- End .row -->
+							    	</div><!-- End .form-choice -->
+							    </div><!-- .End .tab-pane -->
+							</div><!-- End .tab-content -->
+						</div><!-- End .form-tab -->
+            		</div><!-- End .form-box -->
+            	</div><!-- End .container -->
+            </div><!-- End .login-page section-bg -->
         </main><!-- End .main -->
 
         <footer class="footer">
-            <div class="footer-middle">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget widget-about">
-                                <a href="index.php" class="footer-logo">Outfitz</a>
-                                <p>Outfitz adalah destinasi fashion online yang menghadirkan koleksi pakaian stylish dan berkualitas. Temukan tren terbaru, nikmati promo eksklusif, dan rasakan pengalaman belanja yang mudah serta aman. Lengkapi gayamu bersama Outfitz!</p>
+        	<div class="footer-middle">
+	            <div class="container">
+	            	<div class="row">
+	            		<div class="col-sm-6 col-lg-3">
+	            			<div class="widget widget-about">
+	            				<img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+	            				<p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
 
+	            				<div class="social-icons">
+	            					<a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+	            					<a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+	            					<a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+	            					<a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+	            					<a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
+	            				</div><!-- End .soial-icons -->
+	            			</div><!-- End .widget about-widget -->
+	            		</div><!-- End .col-sm-6 col-lg-3 -->
 
-                                <div class="social-icons">
-                                    <a href="https://instagram.com/meaffq/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                                    <a href="https://instagram.com/dea.salsa.503/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                                </div><!-- End .soial-icons -->
-                            </div><!-- End .widget about-widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
+	            		<div class="col-sm-6 col-lg-3">
+	            			<div class="widget">
+	            				<h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="widget">
-                                <h4 class="widget-title">Komitmen Kami</h4>
-                                <p>Kami berkomitmen untuk pengadaan yang etis dan keberlanjutan. Pelajari lebih lanjut tentang praktik keberlanjutan kami.</p>
-                                <a href="contact.php" class="btn btn-outline-secondary btn-sm">Pelajari Lebih Lanjut</a>
-                            </div>
-                        </div>
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-middle -->
+	            				<ul class="widget-list">
+	            					<li><a href="about.html">About Molla</a></li>
+	            					<li><a href="#">How to shop on Molla</a></li>
+	            					<li><a href="#">FAQ</a></li>
+	            					<li><a href="contact.html">Contact us</a></li>
+	            					<li><a href="login.html">Log in</a></li>
+	            				</ul><!-- End .widget-list -->
+	            			</div><!-- End .widget -->
+	            		</div><!-- End .col-sm-6 col-lg-3 -->
 
-            <div class="footer-bottom">
-                <div class="container">
-                    <p class="footer-copyright">Copyright © 2025 Echoes. All Rights Reserved.</p><!-- End .footer-copyright -->
-                    <figure class="footer-payments">
-                        <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
-                    </figure><!-- End .footer-payments -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-bottom -->
+	            		<div class="col-sm-6 col-lg-3">
+	            			<div class="widget">
+	            				<h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+	            				<ul class="widget-list">
+	            					<li><a href="#">Payment Methods</a></li>
+	            					<li><a href="#">Money-back guarantee!</a></li>
+	            					<li><a href="#">Returns</a></li>
+	            					<li><a href="#">Shipping</a></li>
+	            					<li><a href="#">Terms and conditions</a></li>
+	            					<li><a href="#">Privacy Policy</a></li>
+	            				</ul><!-- End .widget-list -->
+	            			</div><!-- End .widget -->
+	            		</div><!-- End .col-sm-6 col-lg-3 -->
+
+	            		<div class="col-sm-6 col-lg-3">
+	            			<div class="widget">
+	            				<h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+	            				<ul class="widget-list">
+	            					<li><a href="#">Sign In</a></li>
+	            					<li><a href="cart.html">View Cart</a></li>
+	            					<li><a href="#">My Wishlist</a></li>
+	            					<li><a href="#">Track My Order</a></li>
+	            					<li><a href="#">Help</a></li>
+	            				</ul><!-- End .widget-list -->
+	            			</div><!-- End .widget -->
+	            		</div><!-- End .col-sm-6 col-lg-3 -->
+	            	</div><!-- End .row -->
+	            </div><!-- End .container -->
+	        </div><!-- End .footer-middle -->
+
+	        <div class="footer-bottom">
+	        	<div class="container">
+	        		<p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+	        		<figure class="footer-payments">
+	        			<img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+	        		</figure><!-- End .footer-payments -->
+	        	</div><!-- End .container -->
+	        </div><!-- End .footer-bottom -->
         </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
@@ -410,7 +388,7 @@
                 <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
-
+            
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
                     <li class="active">
@@ -685,21 +663,16 @@
     </div><!-- End .modal -->
 
     <!-- Plugins JS File -->
-    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.min.js"></scriptalert>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/jquery.hoverIntent.min.js"></script>
     <script src="assets/js/jquery.waypoints.min.js"></script>
     <script src="assets/js/superfish.min.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/wNumb.js"></script>
-    <script src="assets/js/bootstrap-input-spinner.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="assets/js/nouislider.min.js"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 </body>
 
 
-<!-- molla/category-list.html  22 Nov 2019 10:02:52 GMT -->
-
+<!-- molla/login.html  22 Nov 2019 10:04:03 GMT -->
 </html>
