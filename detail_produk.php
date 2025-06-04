@@ -1,8 +1,12 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 
 <!-- molla/product.html  22 Nov 2019 09:54:50 GMT -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -52,13 +56,12 @@
                             <span class="sr-only">Toggle mobile menu</span>
                             <i class="icon-bars"></i>
                         </button>
-
-                        <a href="index.html" class="logo">
-                            <img src="assets/images/logo.png" alt="Molla Logo" width="105" height="25">
+                        <a href="index.php" class="logo">
+                            <span style="font-size: 50px; font-weight: bold; font-family: Arial, sans-serif;">Echoes</span>
                         </a>
 
-                        <nav class="main-nav">
-                            <ul class="menu sf-arrows">
+                        <nav class="main-nav" style="flex: 1; text-align: center;">
+                            <ul class="menu sf-arrows" style="display: inline-flex; gap: 30px; list-style: none; margin: 0; padding: 0;">
                                 <li class="megamenu-container active">
                                     <a href="index.html" class="sf-with-ul">Beranda</a>
                                 </li>
@@ -68,7 +71,7 @@
                                 <li>
                                     <a href="product.html" class="sf-with-ul">Hubungi Kami</a>
                                 </li>
-                              
+
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
@@ -84,7 +87,7 @@
                             </form>
                         </div><!-- End .header-search -->
                         <div class="dropdown compare-dropdown">
-                         <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
+                            <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
                         </div><!-- End .compare-dropdown -->
 
                         <div class="dropdown cart-dropdown">
@@ -181,150 +184,226 @@
                     <div class="product-details-top">
                         <div class="row">
                             <div class="col-md-6">
+                                <?php
+                                include "admin/koneksi.php";
+
+                                // Ambil id_produk dari parameter GET atau POST
+                                $id_produk = isset($_GET['id_produk']) ? $_GET['id_produk'] : 0;
+
+                                // Periksa apakah id_produk valid
+                                if (!$id_produk) {
+                                    die("<p>ID Produk tidak ditemukan. Silakan cek kembali.</p>");
+                                }
+
+                                // Query untuk mendapatkan data produk dan kategori
+                                $sql = "SELECT
+            p.id_produk,
+            p.nm_produk,
+            p.harga,
+            p.stok,
+            p.ket,
+            p.gambar,
+            p.size,
+            k.nm_ktg AS kategori
+        FROM tb_produk p
+        JOIN tb_ktg k ON p.id_ktg = k.id_ktg
+        WHERE p.id_produk = ?";
+
+                                $stmt = $koneksi->prepare($sql);
+                                if (!$stmt) {
+                                    die("<p>Kesalahan query: " . $koneksi->error . "</p>");
+                                }
+
+                                $stmt->bind_param("s", $id_produk);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+
+                                if ($result->num_rows > 0) {
+                                    // Fetch data produk
+                                    $produk = $result->fetch_assoc();
+                                    $sizes = explode(",", $produk['size']); // Pisahkan ukuran berdasarkan koma
+                                }
+                                ?>
+
                                 <div class="product-gallery product-gallery-vertical">
                                     <div class="row">
                                         <figure class="product-main-image">
-                                            <img id="product-zoom" src="assets/images/products/single/1.jpg" data-zoom-image="assets/images/products/single/1-big.jpg" alt="product image">
-
-                                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                                <i class="icon-arrows"></i>
-                                            </a>
+                                            <img id="product-zoom" src="assets/images/products/images.jpeg" <?php echo
+                                                                                                            htmlspecialchars($produk['gambar']); ?> alt="product image">
                                         </figure><!-- End .product-main-image -->
-
-                                        <div id="product-zoom-gallery" class="product-image-gallery">
-                                            <a class="product-gallery-item active" href="#" data-image="assets/images/products/single/1.jpg" data-zoom-image="assets/images/products/single/1-big.jpg">
-                                                <img src="assets/images/products/single/1-small.jpg" alt="product side">
-                                            </a>
-
-                                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/2.jpg" data-zoom-image="assets/images/products/single/2-big.jpg">
-                                                <img src="assets/images/products/single/2-small.jpg" alt="product cross">
-                                            </a>
-
-                                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/3.jpg" data-zoom-image="assets/images/products/single/3-big.jpg">
-                                                <img src="assets/images/products/single/3-small.jpg" alt="product with model">
-                                            </a>
-
-                                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/4.jpg" data-zoom-image="assets/images/products/single/4-big.jpg">
-                                                <img src="assets/images/products/single/4-small.jpg" alt="product back">
-                                            </a>
-                                        </div><!-- End .product-image-gallery -->
                                     </div><!-- End .row -->
                                 </div><!-- End .product-gallery -->
                             </div><!-- End .col-md-6 -->
 
                             <div class="col-md-6">
                                 <div class="product-details">
-                                    <h1 class="product-title">Seragam militery</h1><!-- End .product-title -->
+                                    <h1 class="product-title"><?php echo htmlspecialchars($produk['nm_produk']); ?></h1><!-- End .product-title -->
 
-                                    <div class="product-price">
-                                        Rp3.500.000
-                                    </div><!-- End .product-price -->
+                                    <div class="ratings-container">
+                                    </div><!-- End .rating-container -->
+
+                                    <div class="product-price">Rp. <?php echo number_format($produk['harga'], 0, ',', ','); ?></div>
 
                                     <div class="product-content">
-                                        <p>Buat Perang </p>
+                                        <p><?php echo htmlspecialchars($produk['ket']); ?></p>
                                     </div><!-- End .product-content -->
+                                    <form menthod="post">
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label>Color:</label>
+                                        <div class="details-filter-row details-row-size">
+                                            <label for="size">Size:</label>
+                                            <div class="select-custom">
+                                                <select name="size" id="size" class="from-control">
+                                                    <option value="#" selected="selected">Select a size</option>
+                                                    <?php foreach ($sizes as $size) { ?>
+                                                        <option value="<?php echo htmlspecialchars(strtolower($size)); ?>"><?php echo
+                                                                                                                            htmlspecialchars(strtoupper($size)); ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div><!-- End .product-nav -->
+                                        </div><!-- End .details-filter-row -->
 
-                                        <div class="product-nav product-nav-thumbs">
-                                            <a href="#" class="active">
-                                                <img src="assets/images/products/single/1-thumb.jpg" alt="product desc">
-                                            </a>
-                                            <a href="#">
-                                                <img src="assets/images/products/single/2-thumb.jpg" alt="product desc">
-                                            </a>
-                                        </div><!-- End .product-nav -->
-                                    </div><!-- End .details-filter-row -->
+                                        <div class="details-filter-row details-row-size">
+                                            <label for="qty">Qty:</label>
+                                            <div class="product-details-quantity">
+                                                <input type="number" id="qty" class="form-control"
+                                                    value="1" min="1" max="10" step="1" data-decimals="0"
+                                                    required>
+                                            </div><!-- End .product-details-quantity -->
+                                        </div><!-- End .details-filter-row -->
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="qty">Qty:</label>
-                                        <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                        </div><!-- End .product-details-quantity -->
-                                    </div><!-- End .details-filter-row -->
 
-                                    <div class="product-details-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <div class="product-details-action">
+                                            <button type="submit" name="add_to_cart" class="btn-product
+                                            btn-cart"><span>Keranjang</span></button>
+                                        </div><!-- End .product-details-action -->
+                                    </form>
 
-                                        <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                            <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
-                                        </div><!-- End .details-action-wrapper -->
-                                    </div><!-- End .product-details-action -->
+                                    <?php
+                                    if (isset($_POST['add_to_cart'])) {
+                                        // Cek apakah user sudah login
+                                        if (!isset($_SESSION['id_user'])) {
+                                            echo "<script>alert('Anda harus login terlebih dahulu!'); window.location.href='user.php';</script>";
+                                            exit;
+                                        }
 
-                                    <div class="product-details-footer">
-                                        <div class="product-cat">
-                                            <span>Category:</span>
-                                            <a href="#">Women</a>,
-                                            <a href="#">Dresses</a>,
-                                            <a href="#">Yellow</a>
-                                        </div><!-- End .product-cat -->
+                                        // Ambil data dari form
+                                        $qty = isset($_POST['size']) ? (int)$_POST['size'] : 1;
+                                        $size = isset($_POST['size']) ? $_POST['size'] : '';
+                                        $id_user = $_SESSION['id_user'];
+                                        $total = $produk['harga'] * $qty;
 
-                                        <div class="social-icons social-icons-sm">
-                                            <span class="social-label">Share:</span>
-                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                                            <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                                            <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                                            <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                                        </div>
-                                    </div><!-- End .product-details-footer -->
-                                </div><!-- End .product-details -->
-                            </div><!-- End .col-md-6 -->
-                        </div><!-- End .row -->
-                    </div><!-- End .product-details-top -->
+                                        if ($qty > $produk['stok']) {
+                                            echo "<script>alert('Stok tidak mencukupi. Stok tersedia hanya {$produk['stok']}');</script>";
+                                        } else {
+                                            // Generate ID pesanan baru
+                                            $q = mysqli_query($koneksi, "SELECT MAX(id_pesanan) AS max_id FROM tb_pesanan");
+                                            $d = mysqli_fetch_assoc($q);
+                                            $last_id = $d['max_id'];
 
-                    <div class="product-details-tab">
-                        <ul class="nav nav-pills justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
-                                <div class="product-desc-content">
-                                    <h3>Product Information</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
-                                    <ul>
-                                        <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
-                                        <li>Vivamus finibus vel mauris ut vehicula.</li>
-                                        <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
-                                    </ul>
+                                            if ($last_id) {
+                                                $num = (int)substr($last_id, 1) + 1;
+                                                $new_id = 'M' . str_pad($num, 3, '0', STR_PAD_LEFT);
+                                            } else {
+                                                $new_id = 'M001';
+                                            }
 
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
-                                <div class="product-desc-content">
-                                    <h3>Information</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. </p>
+                                            // Simpan ke tb_pesanan
+                                            $stmt = $koneksi->prepare("INSERT INTO tb_pesanan 
+                                            (id_pesanan, id_produk, qty, size, total, id_user) VALUES 
+                                            (?, ?, ?, ?, ?, ?)");
+                                            $stmt->bind_param(
+                                                "ssisis",
+                                                $new_id,
+                                                $produk['id_produk'],
+                                                $qty,
+                                                $size,
+                                                $total,
+                                                $id_user
+                                            );
 
-                                    <h3>Fabric & care</h3>
-                                    <ul>
-                                        <li>Faux suede fabric</li>
-                                        <li>Gold tone metal hoop handles.</li>
-                                        <li>RI branding</li>
-                                        <li>Snake print trim interior </li>
-                                        <li>Adjustable cross body strap</li>
-                                        <li> Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop: 61cm</li>
-                                    </ul>
+                                            if ($stmt->execute()) {
+                                                echo "<script>alert('Produk berhasil ditambahkan ke 
+                                                keranjang!'); window.location.href='cart.php';</script>";
+                                            } else {
+                                                echo "<p>Gagal menambahkan ke keranjang: " .
+                                                    htmlspecialchars($stmt->error) . "</p>";
+                                            }
+                                        }
+                                    ?>
 
-                                    <h3>Size</h3>
-                                    <p>one size</p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                                </div><!-- End .reviews -->
-                            </div><!-- .End .tab-pane -->
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .product-details-tab -->
+                                        <div class="product-details-footer">
+                                            <div class="product-cat">
+                                                <span>Category:</span>
+                                                <a href="a"><?php echo htmlspecialchars($produk['kategori']); ?></a>
+                                            </div><!-- End .product-cat -->
+                                        </div><!-- End .product-details-footer -->
 
-                    <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+                                    <?php
+                                    } else {
+                                        echo "<p>Produk tidak ditemukan di database.</p>";
+                                    }
 
-                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
-                        data-owl-options='{
+                                    $stmt->close();
+                                    $koneksi->close();
+                                    ?>
+                                </div><!-- End .col-md-6 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .product-details-top -->
+
+                        <div class="product-details-tab">
+                            <ul class="nav nav-pills justify-content-center" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="product-desc-link" data-toggle="tab"
+                                        href="#product-desc-tab" role="tab" aria-controls="product-desc-tab"
+                                        aria-selected="true">Deskripsi</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="product-info-link" data-toggle="tab"
+                                        href="#product-info-tab" role="tab" aria-controls="product-info-tab"
+                                        aria-selected="false">stok</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
+                                    aria-labelledby="product-desc-link">
+                                    <div class="product-desc-content">
+                                        <h3>Tentang Produk</h3>
+                                        <p><?php echo nl2br(htmlspecialchars($produk['ket'])); ?></p> <!--
+                                        Tampilkan deskripsi produk -->
+                                    </div><!-- End .product-desc-content -->
+                                </div><!-- .End .tab-pane -->
+                                <div class="tab-pane fade" id="product-info-tab" role="tabpanel"
+                                    aria-labelledby="product-info-link">
+                                    <div class="product-desc-content">
+                                        <h3>Infomasi Stok Produk</h3>
+                                        <p>Stok: <strong><?php echo htmlspecialchars($produk['stok']); ?></strong></p> <!-- Tampilkan stok produk -->
+                                    </div><!-- .End .tab-pane -->
+                                </div><!-- .End .tab-pane -->
+                            </div><!-- End .tab-content -->
+                        </div><!-- End .product-details-tab -->
+
+                        <?php
+                        include "admin/koneksi.php";
+                        $sql_related = "SELECT
+                        id_produk,
+                        nm_produk,
+                        harga,
+                        gambar
+                        
+                    FROM tb_produk
+                    WHERE id_prodek
+                    ORDER BY RAND()
+                    LIMIT 4";
+                    $query_related = $koneksi->prepare ($sql_related);
+                    $stmt_related->bind_param("s", $id_produk);
+                    $stmt_related->execute();
+                    $result_related = $stmt_related->prepare($result);
+
+                    ?>
+                    
+
+                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                            data-owl-options='{
                             "nav": false, 
                             "dots": true,
                             "margin": 20,
@@ -349,285 +428,88 @@
                                 }
                             }
                         }'>
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <span class="product-label label-new">New</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
-                                </a>
 
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Women</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil skirt</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $60.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 2 Reviews )</span>
-                                </div><!-- End .rating-container -->
-
-                                <div class="product-nav product-nav-thumbs">
-                                    <a href="#" class="active">
-                                        <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
-                                    </a>
-                                    <a href="#">
-                                        <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
-                                    </a>
-
-                                    <a href="#">
-                                        <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
-                                    </a>
-                                </div><!-- End .product-nav -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <span class="product-label label-out">Out of Stock</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-6.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Jackets</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Khaki utility boiler jumpsuit</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    <span class="out-price">$120.00</span>
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 6 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <span class="product-label label-top">Top</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-11.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Shoes</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Light brown studded Wide fit wedges</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $110.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 1 Reviews )</span>
-                                </div><!-- End .rating-container -->
-
-                                <div class="product-nav product-nav-thumbs">
-                                    <a href="#" class="active">
-                                        <img src="assets/images/products/product-11-thumb.jpg" alt="product desc">
-                                    </a>
-                                    <a href="#">
-                                        <img src="assets/images/products/product-11-2-thumb.jpg" alt="product desc">
-                                    </a>
-
-                                    <a href="#">
-                                        <img src="assets/images/products/product-11-3-thumb.jpg" alt="product desc">
-                                    </a>
-                                </div><!-- End .product-nav -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-10.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Jumpers</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Yellow button front tea top</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $56.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 0 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-7.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Jeans</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Blue utility pinafore denim dress</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $76.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 2 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-                    </div><!-- End .owl-carousel -->
-                </div><!-- End .container -->
-            </div><!-- End .page-content -->
+                        </div><!-- End .owl-carousel -->
+                    </div><!-- End .container -->
+                </div><!-- End .page-content -->
         </main><!-- End .main -->
 
         <footer class="footer">
-        	<div class="footer-middle">
-	            <div class="container">
-	            	<div class="row">
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget widget-about">
-	            				<img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
-	            				<p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
+            <div class="footer-middle">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget widget-about">
+                                <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
 
-	            				<div class="social-icons">
-	            					<a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
-	            				</div><!-- End .soial-icons -->
-	            			</div><!-- End .widget about-widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
+                                <div class="social-icons">
+                                    <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
+                                </div><!-- End .soial-icons -->
+                            </div><!-- End .widget about-widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
-	            				<ul class="widget-list">
-	            					<li><a href="about.html">About Molla</a></li>
-	            					<li><a href="#">How to shop on Molla</a></li>
-	            					<li><a href="#">FAQ</a></li>
-	            					<li><a href="contact.html">Contact us</a></li>
-	            					<li><a href="login.html">Log in</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
+                                <ul class="widget-list">
+                                    <li><a href="about.html">About Molla</a></li>
+                                    <li><a href="#">How to shop on Molla</a></li>
+                                    <li><a href="#">FAQ</a></li>
+                                    <li><a href="contact.html">Contact us</a></li>
+                                    <li><a href="login.html">Log in</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
 
-	            				<ul class="widget-list">
-	            					<li><a href="#">Payment Methods</a></li>
-	            					<li><a href="#">Money-back guarantee!</a></li>
-	            					<li><a href="#">Returns</a></li>
-	            					<li><a href="#">Shipping</a></li>
-	            					<li><a href="#">Terms and conditions</a></li>
-	            					<li><a href="#">Privacy Policy</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
+                                <ul class="widget-list">
+                                    <li><a href="#">Payment Methods</a></li>
+                                    <li><a href="#">Money-back guarantee!</a></li>
+                                    <li><a href="#">Returns</a></li>
+                                    <li><a href="#">Shipping</a></li>
+                                    <li><a href="#">Terms and conditions</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
-	            				<ul class="widget-list">
-	            					<li><a href="#">Sign In</a></li>
-	            					<li><a href="cart.html">View Cart</a></li>
-	            					<li><a href="#">My Wishlist</a></li>
-	            					<li><a href="#">Track My Order</a></li>
-	            					<li><a href="#">Help</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
-	            	</div><!-- End .row -->
-	            </div><!-- End .container -->
-	        </div><!-- End .footer-middle -->
+                                <ul class="widget-list">
+                                    <li><a href="#">Sign In</a></li>
+                                    <li><a href="cart.html">View Cart</a></li>
+                                    <li><a href="#">My Wishlist</a></li>
+                                    <li><a href="#">Track My Order</a></li>
+                                    <li><a href="#">Help</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-middle -->
 
-	        <div class="footer-bottom">
-	        	<div class="container">
-	        		<p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
-	        		<figure class="footer-payments">
-	        			<img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
-	        		</figure><!-- End .footer-payments -->
-	        	</div><!-- End .container -->
-	        </div><!-- End .footer-bottom -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+                    <figure class="footer-payments">
+                        <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                    </figure><!-- End .footer-payments -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-bottom -->
         </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
-    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
 
     <!-- Sticky Bar -->
     <div class="sticky-bar">
@@ -671,7 +553,7 @@
                 <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
-            
+
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
                     <li class="active">
@@ -962,4 +844,5 @@
 
 
 <!-- molla/product.html  22 Nov 2019 09:55:05 GMT -->
+
 </html>

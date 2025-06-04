@@ -44,7 +44,7 @@
                             <i class="icon-bars"></i>
                         </button>
                         <a href="index.php" class="logo">
-                            <span style="font-size: 50px; font-weight: bold; font-family: Arial, sans-serif;">Outfitz</span>
+                            <span style="font-size: 50px; font-weight: bold; font-family: Arial, sans-serif;">Echoes</span>
                         </a>
                     </div><!-- End .header-left -->
 
