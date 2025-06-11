@@ -124,7 +124,7 @@
 
                                 <div class="dropdown-cart-action">
                                     <a href="cart.php" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    <a href="checkout.php" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
@@ -364,13 +364,13 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-3">
                             <div class="widget widget-about">
-                                <a href="index.php" class="footer-logo">Outfitz</a>
-                                <p>Outfitz adalah destinasi fashion online yang menghadirkan koleksi pakaian stylish dan berkualitas. Temukan tren terbaru, nikmati promo eksklusif, dan rasakan pengalaman belanja yang mudah serta aman. Lengkapi gayamu bersama Outfitz!</p>
+                                <a href="index.php" class="footer-logo">O</a>
+                                <p>Echoes adalah </p>
 
 
                                 <div class="social-icons">
-                                    <a href="https://instagram.com/meaffq/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                                    <a href="https://instagram.com/dea.salsa.503/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                    <a href="https://instagram.com/ku_kuh11?igsh=OXo1MGNkdWI2YnB4/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                    <a href="https://instagram.com/ku_kuh11?igsh=OXo1MGNkdWI2YnB4" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
                                 </div><!-- End .soial-icons -->
                             </div><!-- End .widget about-widget -->
                         </div><!-- End .col-sm-6 col-lg-3 -->
@@ -414,7 +414,7 @@
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
                     <li class="active">
-                        <a href="index.html">Home</a>
+                        <a href="index.php">Home</a>
 
                         <ul>
                             <li><a href="index-1.html">01 - furniture store</a></li>

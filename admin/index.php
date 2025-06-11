@@ -165,7 +165,7 @@
             <div class="col-12">
               <div class="card info-card customers-card shadow-sm w-100">
                  <div class="card-body text-center py-4">
-                  <h4 class="mb-2">Selamat Datang di Website Admin <span>Ochoes</span></h4>
+                  <h4 class="mb-2">Selamat Datang di Website Admin <span>Echoes</span></h4>
                   <p class="text-muted small mb-0">kelola produk, transaksi, dan pelanggan dangan mudah.</p>
                     </div>
                   </div>
@@ -186,7 +186,7 @@
                       <i class="bi bi-cart"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>0</h6>
+                      <h6>4.200.000</h6>
                     </div>
                   </div>
                 </div>
@@ -205,7 +205,7 @@
                       <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>Rp. 0</h6>
+                      <h6>Rp. 870.000</h6>
                     </div>
                   </div>
                 </div>

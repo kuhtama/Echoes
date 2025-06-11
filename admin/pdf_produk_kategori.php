@@ -83,7 +83,7 @@ $html = '<html>
     </style>
 </head>
 <body>
-    <h1 align="center">Outfitz</h1>
+    <h1 align="center">Echoes</h1>
     <hr>
     <h1 align="center">LAPORAN PRODUK BERDASARKAN KATEGORI</h1>
     <table align="center" cellspacing="0">
@@ -108,7 +108,7 @@ foreach ($data as $row) {
             <td><img src="produk_img/' . $row["gambar"] . '" alt="Gambar"></td>
             <td>' . $row["nm_produk"] . '</td>
             <td>' . $row["nm_ktg"] . '</td>
-            <td>' . $row["desk"] . '</td>
+            <td>' . $row["ket"] . '</td>
             <td>' . $formatted_harga . '</td>
             <td>' . $row["stok"] . '</td>
         </tr>

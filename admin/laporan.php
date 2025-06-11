@@ -239,6 +239,7 @@ if (!isset($_SESSION["sts"]) || $_SESSION["sts"] !== "admin") {
                                     <label class="form-label">Pilih Tipe Laporan</label>
                                     <select id="tipeLaporanSelect" class="form-select">
                                         <option value="" selected disabled>Pilih Tipe Laporan</option>
+                                        <option value="">All</option>
                                     </select>
                                 </div>
 

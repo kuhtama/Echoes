@@ -58,7 +58,7 @@ $html = '<html>
     </style>
 </head>
 <body>
-    <h1 align="center">Furnimart</h1>
+    <h1 align="center">Echoes</h1>
     <hr>
     <h1 align="center">LAPORAN TRANSAKSI PENJUALAN</h1>
     <table align="center" cellspacing="0">

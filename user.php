@@ -259,8 +259,8 @@
 
 
                                     <div class="social-icons">
-                                        <a href="https://instagram.com/meaffq/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                                        <a href="https://instagram.com/dea.salsa.503/" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                        <a href="https://instagram.com/ku_kuh11?igsh=OXo1MGNkdWI2YnB4" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                        <a href="https://instagram.com/ku_kuh11?igsh=OXo1MGNkdWI2YnB4" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
                                     </div><!-- End .soial-icons -->
                                 </div><!-- End .widget about-widget -->
                             </div><!-- End .col-sm-6 col-lg-3 -->
