@@ -344,7 +344,7 @@ session_start();
                                     <div calss="product-details-footer">
                                     </div class="product-cat">
                                     <span>Category:</span>
-                                    <a href="a"><?php echo htmlspecialchars($produk['kategori']); ?></a>
+                                    <a href="a"><?php echo htmlspecialchars($produk['ktg']); ?></a>
                                 </div><!-- End .product-catt -->
                             </div><!--End .product-dtails-footer -->
                         </div><!-- End .product-details -->

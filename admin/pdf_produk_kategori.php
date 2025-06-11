@@ -32,7 +32,7 @@ $data = query("
         tb_produk.nm_produk, 
         tb_produk.harga, 
         tb_produk.stok, 
-        tb_produk.ket AS desk, 
+        tb_produk.ket AS ket, 
         tb_produk.gambar, 
         tb_ktg.nm_ktg 
     FROM tb_produk
