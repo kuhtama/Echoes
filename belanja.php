@@ -365,7 +365,8 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="widget widget-about">
                                 <a href="index.php" class="footer-logo">O</a>
-                                <p>Echoes adalah </p>
+                                <p>Echoes adalah Temukan Gaya Terbaikmu dengan Koleksi Fashion Terkini
+Kualitas Premium, Harga Terjangkau </p>
 
 
                                 <div class="social-icons">
